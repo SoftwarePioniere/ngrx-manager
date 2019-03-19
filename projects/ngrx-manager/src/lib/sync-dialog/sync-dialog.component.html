@@ -1,0 +1,76 @@
+<ion-header>
+    <!-- Header mit Cancel-FAB -->
+    <ion-row class="sopi-modal-header">
+        <ion-col text-center margin-top>
+
+            <!-- NEU -->
+            <ion-label no-margin margin-top>
+                <p class="SOPI-D1" translate>Sync</p>
+                <p class="SOPI-Language" *ngIf="(translationInfoSichtbar$ | async)">Modal_SyncDialog_Titel</p>
+                <p class="SOPI-D2" translate>&nbsp;</p>
+                <p class="SOPI-Language" *ngIf="(translationInfoSichtbar$ | async)">Modal_SyncDialog_Titel2</p>
+
+            </ion-label>
+
+            <div>
+                <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
+                    <ion-fab-button size="small" (click)="abbrechen()">
+                        <ion-icon name="close"></ion-icon>
+                    </ion-fab-button>
+                </ion-fab>
+            </div>
+        </ion-col>
+
+    </ion-row>
+
+</ion-header>
+
+<ion-content [scrollEnabled]="false">
+    <ion-row style="height: 100%">
+        <ion-col>
+            <sopi-scroll>
+                <!-- COMMAND QUEUE LIST -->
+                <ion-item>Noch nicht versendete Daten...</ion-item>
+                <ion-item *ngIf="(commandQueueCount$|async) === 0" lines="none">...keine Daten vorhanden</ion-item>
+                <ion-item class="SOPI-Item" button tappable *ngFor="let s of (commandQueue$|async)">
+                    <ion-icon class="OK2" name="ios-log-out" slot="start"></ion-icon>
+                    <ion-label>
+                        <p class="SOPI-T6">
+                            <ng-container *ngIf="s.action.hasOwnProperty('containerKundeAbholungRequest')">Container {{s?.action?.containerKundeAbholungRequest?.container_nummer}}</ng-container>
+                            <ng-container *ngIf="s.action.hasOwnProperty('containerKundeLieferungRequest')">Container {{s?.action?.containerKundeLieferungRequest?.container_nummer}}</ng-container>
+                            <ng-container *ngIf="s.action.hasOwnProperty('containerFahrzeugRequest')">Container {{s?.action?.containerFahrzeugRequest?.container_nummer}}</ng-container>
+                            <ng-container *ngIf="s.action.hasOwnProperty('abholungKundeFertigRequest')">Kunde {{s?.action?.abholungKundeFertigRequest?.kunde_id}} fertig</ng-container>
+                        </p>
+                    </ion-label>
+                    <ion-label text-right class="SOPI-Mono" style="max-width: 120px" slot="end">
+                        <p class="SOPI-T7">
+                            <ng-container>
+                                {{s?.date | amUtc | amLocal | amDateFormat:'ddd HH:mm' | uppercase | removeDots}}
+                            </ng-container>
+                        </p>
+                    </ion-label>
+                </ion-item>
+
+                <ion-item lines="none" padding-top *ngIf="(commandQueueCount$|async) > 0">
+                    <ion-button slot="end" (click)="datenSenden()">Daten senden</ion-button>
+                </ion-item>
+            </sopi-scroll>
+
+        </ion-col>
+    </ion-row>
+</ion-content>
+
+<!-- Footerzeile mit Hinweis -->
+<ion-footer>
+    <ion-toolbar class="sopi-Footer-Modal">
+        <ion-row>
+            <!--<ion-col size="auto">-->
+                <!--<p class="SOPI-M6" translate> Modal_SyncDialog_Lbl_Hinweis </p>-->
+            <!--</ion-col>-->
+            <!--<ion-col>-->
+                <!--<p class="SOPI-M7" translate> Modal_SyncDialog_Lbl_Hinweis2 </p>-->
+            <!--</ion-col>-->
+        </ion-row>
+    </ion-toolbar>
+</ion-footer>
+

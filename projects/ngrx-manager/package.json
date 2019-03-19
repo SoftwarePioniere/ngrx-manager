@@ -1,0 +1,20 @@
+{
+  "name": "@softwarepioniere/ngrx-manager",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Software Pioniere GmbH & Co. KG",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.2.4",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.2.4",
+    "@ngrx/store": "^7.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoftwarePioniere/ngrx-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SoftwarePioniere/ngrx-manager/issues"
+  },
+  "homepage": "https://github.com/SoftwarePioniere/ngrx-manager#readme"
+}
