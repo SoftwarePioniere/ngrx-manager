@@ -33,7 +33,7 @@ export const CLEAR_REQUESTS = '[NgrxClientManager] Clear all Requests from Store
 export class QueryStackAddAction implements Action {
     readonly type = QUERY_STACK_ADD;
 
-    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date = null, public error: any = null) {
+    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date|null = null, public error: any = null) {
     }
 }
 
@@ -55,7 +55,7 @@ export class QueryStackUpdateAction implements Action {
 export class QueryQueueAddAction implements Action {
     readonly type = QUERY_QUEUE_ADD;
 
-    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date = null, public error: any = null) {
+    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date|null  = null, public error: any = null) {
     }
 }
 
@@ -77,7 +77,7 @@ export class QueryQueueUpdateAction implements Action {
 export class QueryFailedAddAction implements Action {
     readonly type = QUERY_FAILED_ADD;
 
-    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date = null, public error: any = null) {
+    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date|null  = null, public error: any = null) {
     }
 }
 
@@ -114,7 +114,7 @@ export class QueryStackCleanUpAction implements Action {
 export class CommandStackAddAction implements Action {
     readonly type = COMMAND_STACK_ADD;
 
-    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date = null, public error: any = null) {
+    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date|null  = null, public error: any = null) {
     }
 }
 
@@ -136,7 +136,7 @@ export class CommandStackUpdateAction implements Action {
 export class CommandQueueAddAction implements Action {
     readonly type = COMMAND_QUEUE_ADD;
 
-    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date = null, public error: any = null) {
+    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date|null  = null, public error: any = null) {
     }
 }
 
@@ -158,7 +158,7 @@ export class CommandQueueUpdateAction implements Action {
 export class CommandFailedAddAction implements Action {
     readonly type = COMMAND_FAILED_ADD;
 
-    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date = null, public error: any = null) {
+    constructor(public key: string, public action: any, public method: RequestMethod, public requestType: RequestType, public date: Date|null  = null, public error: any = null) {
     }
 }
 

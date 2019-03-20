@@ -1,13 +1,16 @@
 {
   "name": "@softwarepioniere/ngrx-manager",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Software Pioniere GmbH & Co. KG",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:lib": "ng build ngrx-manager --prod && cp projects/ngrx-manager/package.json dist/ngrx-manager/",
+    "build:lib:prodx": "rm -rf dist && ng build ngrx-manager --prod && cp projects/ngrx-manager/package.json dist/ngrx-manager/",
+    "build:lib:prod": "rm -rf dist && ng build NgrxManager && cp projects/ngrx-manager/package.json dist/ngrx-manager/",
+    "build:lib": "rm -rf dist && ng build NgrxManager && cd projects/ngrx-manager && npm version patch -m \"Release Patch Upgrade %s\" && cd .. && cd .. && cp projects/ngrx-manager/package.json dist/ngrx-manager/ && npm run publish",
+    "publish": "cd dist/ngrx-manager && npm publish && cd .. && cd ..",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

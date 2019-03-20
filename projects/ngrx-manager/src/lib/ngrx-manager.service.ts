@@ -6,9 +6,9 @@ import {Action, select, Store} from '@ngrx/store';
 
 import {ConnectionStatus, NetworkService} from './network.service';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {Dictionary, NgrxClientManagerConfig, Request, RequestMethod, RequestType} from './model';
+import {Dictionary, NgrxManagerConfig, Request, RequestMethod, RequestType} from './model';
 import * as actions from './actions';
-import {getCommandFailed, getCommandQueue, getCommandStack, getQueryFailed, getQueryQueue, getQueryStack, NgrxClientManagerState} from './reducer';
+import {getCommandFailed, getCommandQueue, getCommandStack, getQueryFailed, getQueryQueue, getQueryStack, NgrxManagerState} from './reducer';
 import {HttpErrorResponse} from '@angular/common/http';
 
 
@@ -34,7 +34,7 @@ export class NgrxManagerService {
   commandQueue$ = new Subject<Array<Request>>();
   commandFailed$ = new Subject<Array<Request>>();
 
-  constructor(private store: Store<NgrxClientManagerState>,
+  constructor(private store: Store<NgrxManagerState>,
               private networkService: NetworkService
   ) {
     // QUERY
@@ -95,7 +95,7 @@ export class NgrxManagerService {
   }
 
   // 2. Wenn die Client-NGRX Anfrage durchgeführt wurde (Erfolgreich oder Fehler) wird diese Info an diese Funktion übergeben
-  public checkRequest(key: string, action: Action, method: RequestMethod, type: RequestType, error: HttpErrorResponse = null): void {
+  public checkRequest(key: string, action: Action, method: RequestMethod, type: RequestType, error: HttpErrorResponse|null = null): void {
     // QUERY
     // -----
     if (method === RequestMethod.QUERY) {
@@ -151,7 +151,7 @@ export class NgrxManagerService {
       if (type === RequestType.Fehler) {
         console.log('ERROR', error);
         console.log('RM:: checkRequest :: COMMAND :: FEHLER', key);
-        if (error.status === 400) {
+        if (error!== null && error.status === 400) {
           // FEHLERHAFTER REQUEST
 
         }
@@ -203,10 +203,10 @@ export class NgrxManagerService {
       // -----
 
       // CACHE ÜBER ANFRAGE DEAKTIVIERT
-      if (action['optPayload'] !== undefined &&
-          action['optPayload'] !== null &&
-          action['optPayload']['ngrxClientManager'] !== undefined) {
-        const config = <NgrxClientManagerConfig> action['optPayload']['ngrxClientManager'];
+      if ((<any>action)['optPayload'] !== undefined &&
+          (<any>action)['optPayload'] !== null &&
+          (<any>action)['optPayload']['ngrxClientManager'] !== undefined) {
+        const config = <NgrxManagerConfig> (<any>action)['optPayload']['ngrxClientManager'];
         if (!config.cache) {
           return true;
         }

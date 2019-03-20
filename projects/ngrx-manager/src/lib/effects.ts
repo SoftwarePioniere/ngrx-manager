@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Action, select, Store} from '@ngrx/store';
-import {getCommandFailed, getCommandQueue, getCommandStack, getQueryFailed, getQueryQueue, getQueryStack, NgrxClientManagerState} from './reducer';
+import {getCommandFailed, getCommandQueue, getCommandStack, getQueryFailed, getQueryQueue, getQueryStack} from './reducer';
 import {Observable} from 'rxjs';
 import {map, switchMap, withLatestFrom} from 'rxjs/operators';
 import * as actions from './actions';
@@ -51,7 +51,7 @@ export class NgrxManagerEffects {
 
             queryStackValues.forEach(() => {
                 const request = queryStackValues.shift();
-                if (!queryQueue.containsKey(request.key)) {
+                if (request!== undefined && request!== null &&!queryQueue.containsKey(request.key)) {
                     queryQueue.add(request.key, request);
                 }
             });
@@ -204,9 +204,11 @@ export class NgrxManagerEffects {
 
             for (let i = 0; i < commandStackValues.length; i++) {
                 const request = commandStackValues.shift();
-                commandStack.remove(request.key);
-                if (request !== undefined && request.action !== undefined) {
-                    commandQueue.unshift(request.action);
+                if(request !== undefined && request !== null){
+                    commandStack.remove(request.key);
+                    if (request !== undefined && request.action !== undefined) {
+                        commandQueue.unshift(request.action);
+                    }
                 }
             }
 

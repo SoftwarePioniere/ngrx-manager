@@ -44,7 +44,7 @@ export class Dictionary<T> implements IDictionary<T> {
     constructor(init?: { key: string; value: T; }[]) {
         if (init) {
             for (let x = 0; x < init.length; x++) {
-                this[init[x].key] = init[x].value;
+                (<any>this)[init[x].key] = init[x].value;
                 this._keys.push(init[x].key);
                 this._values.push(init[x].value);
             }
@@ -52,8 +52,8 @@ export class Dictionary<T> implements IDictionary<T> {
     }
 
     add(key: string, value: T) {
-        if (this[key] === undefined) {
-            this[key] = value;
+        if ((<any>this)[key] === undefined) {
+            (<any>this)[key] = value;
             this._keys.push(key);
             this._values.push(value);
         }
@@ -64,11 +64,11 @@ export class Dictionary<T> implements IDictionary<T> {
         this._keys.splice(index, 1);
         this._values.splice(index, 1);
 
-        delete this[key];
+        delete (<any>this)[key];
     }
 
     item(key: string): T {
-        return this[key];
+        return (<any>this)[key];
     }
 
     keys(): string[] {
@@ -80,7 +80,7 @@ export class Dictionary<T> implements IDictionary<T> {
     }
 
     containsKey(key: string) {
-        if (typeof this[key] === 'undefined') {
+        if (typeof (<any>this)[key] === 'undefined') {
             return false;
         }
 
@@ -92,10 +92,10 @@ export class Dictionary<T> implements IDictionary<T> {
     }
 }
 
-export interface NgrxClientManagerConfig {
+export interface NgrxManagerConfig {
     cache: boolean;
 }
 
-export interface NgRxClientManagerAction extends Action {
+export interface NgRxManagerAction extends Action {
     optParams: any;
 }

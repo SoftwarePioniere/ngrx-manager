@@ -4,17 +4,17 @@ import * as actions from './actions';
 import {Observable} from 'rxjs';
 
 
-export const SopiNgrxClientManagerFeature = 'SopiNgrxClientManager';
+export const SopiNgrxManagerFeature = 'SopiNgrxManager';
 
-export const reducers: ActionReducerMap<NgrxClientManagerModuleState> = {
-    ngrxClientManager: ngrxClientManagerReducer
+export const reducers: ActionReducerMap<NgrxManagerModuleState> = {
+    ngrxManager: ngrxManagerReducer
 };
 
-export interface NgrxClientManagerModuleState {
-    ngrxClientManager: NgrxClientManagerState;
+export interface NgrxManagerModuleState {
+    ngrxManager: NgrxManagerState;
 }
 
-export interface NgrxClientManagerState {
+export interface NgrxManagerState {
     // GET
     queryStack: Dictionary<Request>;
     queryQueue: Dictionary<Request>;
@@ -26,7 +26,7 @@ export interface NgrxClientManagerState {
     commandFailed: Array<Request>;
 }
 
-export const initialNgrxClientManagerState: NgrxClientManagerState = {
+export const initialNgrxManagerState: NgrxManagerState = {
     queryStack: new Dictionary<Request>(),
     queryQueue: new Dictionary<Request>(),
     queryFailed: [],
@@ -35,14 +35,14 @@ export const initialNgrxClientManagerState: NgrxClientManagerState = {
     commandFailed: []
 };
 
-export function ngrxClientManagerReducer(state = initialNgrxClientManagerState, action: Action): NgrxClientManagerState {
+export function ngrxManagerReducer(state = initialNgrxManagerState, action: Action): NgrxManagerState {
     switch (action.type) {
 
         // QUERY
         case actions.QUERY_STACK_UPDATE: {
             const a = <actions.QueryStackUpdateAction>action;
 
-            return Object.assign({}, state, <NgrxClientManagerState>{
+            return Object.assign({}, state, <NgrxManagerState>{
                 ...state,
                 queryStack: a.queryStack
             });
@@ -51,7 +51,7 @@ export function ngrxClientManagerReducer(state = initialNgrxClientManagerState, 
         case actions.QUERY_QUEUE_UPDATE: {
             const a = <actions.QueryQueueUpdateAction>action;
 
-            return Object.assign({}, state, <NgrxClientManagerState>{
+            return Object.assign({}, state, <NgrxManagerState>{
                 ...state,
                 queryQueue: a.queryQueue
             });
@@ -60,7 +60,7 @@ export function ngrxClientManagerReducer(state = initialNgrxClientManagerState, 
         case actions.QUERY_FAILED_UPDATE: {
             const a = <actions.QueryFailedUpdateAction>action;
 
-            return Object.assign({}, state, <NgrxClientManagerState>{
+            return Object.assign({}, state, <NgrxManagerState>{
                 ...state,
                 queryFailed: a.queryFailed
             });
@@ -71,7 +71,7 @@ export function ngrxClientManagerReducer(state = initialNgrxClientManagerState, 
         case actions.COMMAND_STACK_UPDATE: {
             const a = <actions.CommandStackUpdateAction>action;
 
-            return Object.assign({}, state, <NgrxClientManagerState>{
+            return Object.assign({}, state, <NgrxManagerState>{
                 ...state,
                 commandStack: a.commandStack
             });
@@ -80,7 +80,7 @@ export function ngrxClientManagerReducer(state = initialNgrxClientManagerState, 
         case actions.COMMAND_QUEUE_UPDATE: {
             const a = <actions.CommandQueueUpdateAction>action;
 
-            return Object.assign({}, state, <NgrxClientManagerState>{
+            return Object.assign({}, state, <NgrxManagerState>{
                 ...state,
                 commandQueue: a.commandQueue
             });
@@ -89,7 +89,7 @@ export function ngrxClientManagerReducer(state = initialNgrxClientManagerState, 
         case actions.COMMAND_FAILED_UPDATE: {
             const a = <actions.CommandFailedUpdateAction>action;
 
-            return Object.assign({}, state, <NgrxClientManagerState>{
+            return Object.assign({}, state, <NgrxManagerState>{
                 ...state,
                 commandFailed: a.commandFailed
             });
@@ -99,10 +99,9 @@ export function ngrxClientManagerReducer(state = initialNgrxClientManagerState, 
         case actions.CLEAR_REQUESTS: {
             const a = <actions.ClearRequestsAction>action;
 
-            console.log('CLEAR REQUESTS!!');
-            return Object.assign({}, state, <NgrxClientManagerState>{
+            return Object.assign({}, state, <NgrxManagerState>{
                 ...state,
-                initialNgrxClientManagerState
+                initialNgrxManagerState
             });
         }
 
@@ -114,37 +113,39 @@ export function ngrxClientManagerReducer(state = initialNgrxClientManagerState, 
 }
 
 
-export const getModuleState = createFeatureSelector<NgrxClientManagerModuleState>(SopiNgrxClientManagerFeature);
+export const getModuleState = createFeatureSelector<NgrxManagerModuleState>(SopiNgrxManagerFeature);
 
-export const getNgrxClientManagerState = createSelector(getModuleState, (state: NgrxClientManagerModuleState) => state.ngrxClientManager);
+export const getNgrxClientManagerState = createSelector(getModuleState, (state: NgrxManagerModuleState) => state.ngrxManager);
 
-export const getQueryStack = createSelector(getNgrxClientManagerState, (state: NgrxClientManagerState) => {
+export const getQueryStack = createSelector(getNgrxClientManagerState, (state: NgrxManagerState) => {
     return new Dictionary<Request>(state.queryStack._values.map((item) => {
         return {key: item.key, value: item};
     }));
 });
-export const getQueryQueue = createSelector(getNgrxClientManagerState, (state: NgrxClientManagerState) => {
+export const getQueryQueue = createSelector(getNgrxClientManagerState, (state: NgrxManagerState) => {
     return new Dictionary<Request>(state.queryQueue._values.map((item) => {
         return {key: item.key, value: item};
     }));
 });
-export const getQueryFailed = createSelector(getNgrxClientManagerState, (state: NgrxClientManagerState) => state.queryFailed);
-export const getCommandStack = createSelector(getNgrxClientManagerState, (state: NgrxClientManagerState) => {
+export const getQueryFailed = createSelector(getNgrxClientManagerState, (state: NgrxManagerState) => state.queryFailed);
+export const getCommandStack = createSelector(getNgrxClientManagerState, (state: NgrxManagerState) => {
     return new Dictionary<Request>(state.commandStack._values.map((item) => {
         return {key: item.key, value: item};
     }));
 });
-export const getCommandQueue = createSelector(getNgrxClientManagerState, (state: NgrxClientManagerState) => {
+export const getCommandQueue = createSelector(getNgrxClientManagerState, (state: NgrxManagerState) => {
     return Array.from(state.commandQueue);
 });
-export const getCommandFailed = createSelector(getNgrxClientManagerState, (state: NgrxClientManagerState) => {
+export const getCommandFailed = createSelector(getNgrxClientManagerState, (state: NgrxManagerState) => {
     return Array.from(state.commandFailed);
 });
 
 
 // COUNT
 export const getQueryStackCount = createSelector(getQueryStack, (queryStack: Dictionary<Request>) => {
-    console.log(queryStack._values.length);
+    if(queryStack === null || queryStack._values === null) {
+        return 0;
+    }
     return queryStack._values.length;
 });
 export const getQueryQueueCount = createSelector(getQueryQueue, (queryQueue: Dictionary<Request>) => {
@@ -152,20 +153,28 @@ export const getQueryQueueCount = createSelector(getQueryQueue, (queryQueue: Dic
     return queryQueue._values.length;
 });
 export const getQueryFailedCount = createSelector(getQueryFailed, (queryFailed: Array<Request>) => {
-    console.log(queryFailed.length);
+    if(queryFailed === null) {
+        return 0;
+    }
     return queryFailed.length;
 });
 
 
 export const getCommandStackCount = createSelector(getCommandStack, (commandStack: Dictionary<Request>) => {
-    console.log(commandStack._values.length);
+    if(commandStack === null || commandStack._values === null) {
+        return 0;
+    }
     return commandStack._values.length;
 });
 export const getCommandQueueCount = createSelector(getCommandQueue, (commandQueue: Array<Request>) => {
-    console.log(commandQueue.length);
+    if(commandQueue === null) {
+        return 0;
+    }
     return commandQueue.length;
 });
 export const getCommandFailedCount = createSelector(getCommandFailed, (commandFailed: Array<Request>) => {
-    console.log(commandFailed.length);
+    if(commandFailed === null) {
+        return 0;
+    }
     return commandFailed.length;
 });

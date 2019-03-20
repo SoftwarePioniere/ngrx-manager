@@ -1,6 +1,6 @@
 import {CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule} from '@angular/core';
 import {ActionReducer, StoreModule} from '@ngrx/store';
-import {reducers, SopiNgrxClientManagerFeature} from './reducer';
+import {reducers, SopiNgrxManagerFeature} from './reducer';
 import {EffectsModule} from '@ngrx/effects';
 import {LocalStorageConfig, localStorageSync} from 'ngrx-store-localstorage';
 import {NgrxManagerService} from './ngrx-manager.service';
@@ -10,6 +10,7 @@ import {SyncDialogComponent} from './sync-dialog/sync-dialog.component';
 import {NgrxManagerRoutingModule} from './ngrx-manager-routing.module';
 import {CommonModule} from '@angular/common';
 import {MomentModule} from 'ngx-moment';
+import {RemoveDotsModule} from "./pipes/remove-dots/remove-dots.module";
 
 export function sessionStorage(reducer: ActionReducer<any>): ActionReducer<any> {
 
@@ -27,14 +28,18 @@ export function sessionStorage(reducer: ActionReducer<any>): ActionReducer<any> 
 @NgModule({
   imports: [
     CommonModule,
-    StoreModule.forFeature(SopiNgrxClientManagerFeature, reducers, {metaReducers: [sessionStorage]}),
+    StoreModule.forFeature(SopiNgrxManagerFeature, reducers, {metaReducers: [sessionStorage]}),
     EffectsModule.forFeature([
       NgrxManagerEffects
     ]),
     NgrxManagerRoutingModule,
-    MomentModule
+    MomentModule,
+    RemoveDotsModule
   ],
   declarations: [
+    SyncDialogComponent
+  ],
+  exports: [
     SyncDialogComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

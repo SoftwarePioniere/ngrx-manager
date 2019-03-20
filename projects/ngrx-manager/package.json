@@ -1,9 +1,10 @@
 {
   "name": "@softwarepioniere/ngrx-manager",
-  "version": "0.0.1",
+  "version": "0.0.12",
   "description": "",
   "author": "Software Pioniere GmbH & Co. KG",
   "license": "MIT",
+  "main": "src/public_api.ts",
   "peerDependencies": {
     "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.2.4",
     "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.2.4",

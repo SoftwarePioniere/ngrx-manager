@@ -32,6 +32,10 @@
     "skipLibCheck": true
   },
   "angularCompilerOptions": {
-    "strictMetadataEmit": true
+    "strictMetadataEmit": true,
+    "annotateForClosureCompiler": true,
+    "skipTemplateCodegen": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }

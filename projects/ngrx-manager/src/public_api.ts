@@ -11,3 +11,5 @@ export * from './lib/reducer';
 export * from './lib/ngrx-manager.module';
 export * from './lib/ngrx-manager-routing.module';
 export * from './lib/sync-dialog/sync-dialog.component';
+export * from './lib/pipes/remove-dots/remove-dots.module';
+export * from './lib/pipes/remove-dots/remove-dots.pipe';

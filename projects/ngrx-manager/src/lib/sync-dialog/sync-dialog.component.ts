@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, Subject, Subscription} from 'rxjs';
 
 import {select, Store} from '@ngrx/store';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -18,16 +18,15 @@ import {
     getQueryQueueCount,
     getQueryStack,
     getQueryStackCount,
-    NgrxClientManagerState
+    NgrxManagerState
 } from '../reducer';
-import {FeedbackService} from '../../providers/feedback-service/feedback.service';
-import {WebsocketStartAction} from '../websocket/websocket.actions';
-import {TranslateService} from '@ngx-translate/core';
-import {getCurrentLanguage, getTranslationInfoSichtbar, LangState} from '../../lang';
-import {NetworkService} from '../../providers/network.service';
-import {RequestStackService} from '../request-stack.service';
+// import {FeedbackService} from '../../providers/feedback-service/feedback.service';
+// import {WebsocketStartAction} from '../websocket/websocket.actions';
+// import {TranslateService} from '@ngx-translate/core';
+// import {getCurrentLanguage, getTranslationInfoSichtbar, LangState} from '../../lang';
+import {NetworkService} from '../network.service';
+import {NgrxManagerService} from '../ngrx-manager.service';
 import {Dictionary, Request} from '../model';
-import {DialogeBase} from '../../../pages/dialoge.base';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as actions from '../actions';
 
@@ -36,7 +35,7 @@ import * as actions from '../actions';
     templateUrl: './sync-dialog.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SyncDialogComponent extends DialogeBase implements OnInit {
+export class SyncDialogComponent implements OnInit, OnDestroy {
     isOnline$: Observable<Boolean>;
 
 
@@ -60,17 +59,39 @@ export class SyncDialogComponent extends DialogeBase implements OnInit {
     queryStack$: Observable<Dictionary<Request>>;
     queryQueue$: Observable<Dictionary<Request>>;
     queryFailed$: Observable<Request[]>;
-
+    public returnUrl: string;
+    public queryParams: Subscription;
 
     constructor(public router: Router,
                 public route: ActivatedRoute,
-                public storeNgrxClientManager: Store<NgrxClientManagerState>,
-                public translate: TranslateService,
-                public langStore: Store<LangState>,
+                public storeNgrxClientManager: Store<NgrxManagerState>,
+                // public langStore: Store<LangState>,
+                // public translate: TranslateService,
                 private sanitizer: DomSanitizer,
                 private networkService: NetworkService,
-                private requestStackService: RequestStackService) {
-        super(router, langStore, translate);
+                private ngrxManagerService: NgrxManagerService) {
+        // this.translate.setDefaultLang('de');
+        // this.lang$ = langStore.pipe(select(getCurrentLanguage));
+    }
+
+    async goBack() {
+        await this.router.navigate([this.returnUrl]);
+    }
+
+    async abbrechen() {
+        await this.goBack();
+    }
+
+    ngOnDestroy(): void {
+        if (this.queryParams != null) {
+            this.queryParams.unsubscribe();
+        }
+    }
+
+    ionViewWillLeave(): void {
+        if (this.queryParams != null) {
+            this.queryParams.unsubscribe();
+        }
     }
 
     async ionWillOpen() {
@@ -90,13 +111,13 @@ export class SyncDialogComponent extends DialogeBase implements OnInit {
 
         this.isOnline$ = this.networkService.isOnline();
 
-        this.translationInfoSichtbar$ = this.langStore.pipe(select(getTranslationInfoSichtbar));
-        this.lang$ = this.langStore.pipe(select(getCurrentLanguage));
-        this.lang$.subscribe(lang => this.translate.use(lang));
+        // this.translationInfoSichtbar$ = this.langStore.pipe(select(getTranslationInfoSichtbar));
+        // this.lang$ = this.langStore.pipe(select(getCurrentLanguage));
+        // this.lang$.subscribe(lang => this.translate.use(lang));
         this.lang$.subscribe(lang => moment.locale(lang));
 
         // COMMAND
-        this.requestStackServiceIsEnabled$ = this.requestStackService.isEnabled$();
+        this.requestStackServiceIsEnabled$ = this.ngrxManagerService.isEnabled$();
         this.commandStackCount$ = this.storeNgrxClientManager.pipe(select(getCommandStackCount));
         this.commandQueueCount$ = this.storeNgrxClientManager.pipe(select(getCommandQueueCount));
         this.commandFailedCount$ = this.storeNgrxClientManager.pipe(select(getCommandFailedCount));
